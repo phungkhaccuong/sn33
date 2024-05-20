@@ -180,12 +180,15 @@ class ValidatorLib:
 
         if full_conversation:
             conversation_guid = str(Utils.get(full_conversation, "guid"))
+            print(f'conversation_guid..................{conversation_guid}')
             num_lines = len(Utils.get(full_conversation, 'lines', []))
+            print(f'num_lines........................:{num_lines}')
 
-            bt.logging.info(f"Reserved conversation ID: {conversation_guid} with {num_lines} lines. Sending to {c.get('env','LLM_TYPE')} LLM...")
+            print(f"Reserved conversation ID: {conversation_guid} with {num_lines} lines. Sending to {c.get('env','LLM_TYPE')} LLM...")
 
             # Do overview tagging and generate base participant profiles
             full_conversation_metadata = await self.generate_full_convo_metadata(full_conversation)
+            print(f'full_conversation_metadata........................{full_conversation_metadata}')
             if not full_conversation_metadata:
                 bt.logging.error(f"ERROR:927402. No metadata for conversation returned to validator. Aborting.")
                 validatorHotkey = "HK-FAIL"
@@ -193,6 +196,7 @@ class ValidatorLib:
 
                 return None
             full_conversation_tags = Utils.get(full_conversation_metadata, "tags", [])
+            print(f'full_conversation_tags............{full_conversation_tags}')
             bt.logging.info(f"Found {len(full_conversation_tags)} tags in FullConvo")
 
             log_path = c.get('env', 'SCORING_DEBUG_LOG')
@@ -204,6 +208,7 @@ class ValidatorLib:
             if minValidTags:
                 # Break the full conversation up into overlapping conversation windows
                 convoWindows = self.getConvoWindows(full_conversation)
+                print(f'convoWindows.....................{convoWindows}')
                 if len(convoWindows) > minConvWindows:
                     out = (full_conversation, full_conversation_metadata, convoWindows)
                 else:
@@ -247,9 +252,9 @@ class ValidatorLib:
 
     async def generate_full_convo_metadata(self, convo):
         if self.verbose:
-            bt.logging.info(f"Execute generate_full_convo_metadata for participants {convo['participants']}")
+            print(f"Execute generate_full_convo_metadata for participants {convo['participants']}")
         else:
-            bt.logging.info(f"Execute generate_full_convo_metadata")
+            print(f"Execute generate_full_convo_metadata")
 
         llml = LlmLib()
         result = await llml.conversation_to_metadata(convo)
