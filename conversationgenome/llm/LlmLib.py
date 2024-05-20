@@ -32,7 +32,6 @@ class LlmLib:
 
         # Import the required LLM class dynamically
         class_name = f"conversationgenome.llm.{llm_class}"
-        print(f'class_name.................{class_name}')
         module = None
         try:
             module = __import__(class_name)
@@ -42,11 +41,8 @@ class LlmLib:
         if module:
             # Get the class from the imported module
             module_class_obj = getattr(module.llm, llm_class)
-            print(f'module_class_obj................:{module_class_obj}')
             main_class = getattr(module_class_obj, llm_class)
-            print(f'main_class.............{main_class}')
             llm_instance = main_class()
-            print(f'llm_instance......:{llm_instance}')
             out = llm_instance
 
         return out

@@ -180,7 +180,6 @@ class ValidatorLib:
 
         if full_conversation:
             conversation_guid = str(Utils.get(full_conversation, "guid"))
-            print(f'conversation_guid..................{conversation_guid}')
             num_lines = len(Utils.get(full_conversation, 'lines', []))
             print(f'num_lines........................:{num_lines}')
 
