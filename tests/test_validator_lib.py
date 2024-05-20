@@ -65,7 +65,7 @@ async def test_full():
         tags = Utils.get(full_conversation_metadata, "tags", [])
         print(f'tags....:{tags}')
         vectors = Utils.get(full_conversation_metadata, "vectors", [])
-        print(f'vectors........{vectors}')
+        #print(f'vectors........{vectors}')
         full_conversation_tag_count = len(tags)
         lines = Utils.get(full_conversation, "lines", [])
         participants = Utils.get(full_conversation, "participants", [])
