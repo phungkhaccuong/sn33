@@ -114,7 +114,6 @@ async def test_full():
             mock_miner_responses = []
             for idx, miner_result in enumerate(miner_results):
                 print(f"RESULTS from miner idx: {idx} uid: {miner_result['uid']}, tags: {len(miner_result['tags'])} vector count: {len(miner_result['vectors'])}")
-                print(f'miner_result....pppp:{miner_result}')
                 response = MockResponse()
                 response.axon.hotkey = "HK-"+str(idx)
                 response.axon.uuid = str(miner_result['uid'])
