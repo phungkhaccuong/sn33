@@ -53,27 +53,26 @@ async def test_full():
     vl = ValidatorLib()
     el = Evaluator()
     result = await vl.reserve_conversation(batch_num=batch_num)
-    print(f'vl.reserve_conversation...............................{result}')
+    #########################print(f'vl.reserve_conversation...............................{result}')
     test_mode = True
     if result:
         (full_conversation, full_conversation_metadata, conversation_windows) = result
         llm_type = c.get("env", "LLM_TYPE")
         model = c.get("env", "OPENAI_MODEL")
         conversation_guid = Utils.get(full_conversation, "guid")
-        print(f'conversation_guid..........:{conversation_guid}')
         tags = Utils.get(full_conversation_metadata, "tags", [])
-        print(f'tags....:{tags}')
+        #################print(f'tags....:{tags}')
         vectors = Utils.get(full_conversation_metadata, "vectors", [])
         #print(f'vectors........{vectors}')
         full_conversation_tag_count = len(tags)
         lines = Utils.get(full_conversation, "lines", [])
         participants = Utils.get(full_conversation, "participants", [])
-        print(f'participants......:{participants}')
+        ########################print(f'participants......:{participants}')
         miners_per_window = c.get("validator", "miners_per_window", 3)
         min_lines = c.get("convo_window", "min_lines", 5)
         max_lines = c.get("convo_window", "max_lines", 50)
         overlap_lines = c.get("convo_window", "overlap_lines", 2)
-        print(f'min_lines:{min_lines}.max_lines:{max_lines}.overlap_lines.:{overlap_lines}')
+        ###################print(f'min_lines:{min_lines}.max_lines:{max_lines}.overlap_lines.:{overlap_lines}')
 
         validatorHotkey = "VHK-0"
 
@@ -105,19 +104,18 @@ async def test_full():
         # Loop through conversation windows. Send each window to multiple miners
         for window_idx, conversation_window in enumerate(conversation_windows):
             selected_miner_uids = vl.selectStage1Miners(miner_uids)
-            print(f'selected_miner_uids:{selected_miner_uids}')
-            print(f"Sending conversation_window {window_idx} to selected miners: {selected_miner_uids}")
+            #print(f"Sending conversation_window {window_idx} to selected miners: {selected_miner_uids}")
 
             miner_results = await vl.send_to_miners(conversation_guid, window_idx, conversation_window, selected_miner_uids)
-            print(f'miner_results:{miner_results}')
+            #print(f'miner_results:{miner_results}')
             mock_miner_responses = []
             for idx, miner_result in enumerate(miner_results):
-                print(f"RESULTS from miner idx: {idx} uid: {miner_result['uid']}, tags: {len(miner_result['tags'])} vector count: {len(miner_result['vectors'])}")
+                #print(f"RESULTS from miner idx: {idx} uid: {miner_result['uid']}, tags: {len(miner_result['tags'])} vector count: {len(miner_result['vectors'])}")
                 response = MockResponse()
                 response.axon.hotkey = "HK-"+str(idx)
                 response.axon.uuid = str(miner_result['uid'])
                 response.cgp_output = [miner_result]
-                print(f'response:::{response}')
+                #print(f'response:::{response}')
                 await vl.put_convo(response.axon.hotkey, conversation_guid, response.cgp_output[0], type="miner", batch_num=batch_num, window=idx)
 
                 mock_miner_responses.append(response)

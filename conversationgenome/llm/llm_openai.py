@@ -118,6 +118,7 @@ class llm_openai:
 
     async def conversation_to_metadata(self,  convo):
         (xml, participants) = self.generate_convo_xml(convo)
+        print(f'(xml, participants)....................................{(xml, participants)}')
         tags = None
         out = {"tags":{}}
 
@@ -373,13 +374,17 @@ class llm_openai:
             return
 
         call_type = c.get('enc', "OPEN_AI_CALL_TYPE", 'csv')
+        print(f'call_type:..........................................{call_type}')
         if call_type == "function":
+            print("1111111111111111111111")
             out = await self.openai_prompt_call_function(convoXmlStr=convoXmlStr, participants=participants)
         elif call_type == "json":
+            print("2222222222222")
             out = await self.openai_prompt_call_json(convoXmlStr=convoXmlStr, participants=participants)
         else:
+            print("33333333333333333333333333333")
             out = await self.openai_prompt_call_csv(convoXmlStr=convoXmlStr, participants=participants)
-
+        print(f'out.........................................{out}')
         return out
 
     async def test_tagging(self):
