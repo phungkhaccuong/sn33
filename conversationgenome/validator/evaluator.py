@@ -48,7 +48,6 @@ class Evaluator:
         # Note: conversation_metadata['vectors'] is a dict, so:
         #       numeric_vectors = conversation_metadata['vectors'][tag_name]['vectors']
         for tag_name, val in conversation_metadata['vectors'].items():
-            print(f'val vector>>>>>>>>>>>>>>>{val["vectors"]}')
             all_vectors.append(val['vectors'])
             #all_vectors.append(val)
             count += 1
@@ -59,7 +58,6 @@ class Evaluator:
         # Create a vector representing the entire content by averaging the vectors of all tokens
         if len(all_vectors) > 0:
             neighborhood_vectors = np.mean(all_vectors, axis=0)
-            print(f'neighborhood_vectors....................{neighborhood_vectors}')
             return neighborhood_vectors
         else:
             return None
@@ -83,6 +81,7 @@ class Evaluator:
         return similarity_score
 
     async def calculate_penalty(self, uid, score, num_tags, num_unique_tags, min_score, max_score):
+        #uid, adjusted_score, total_tag_count, len(unique_tags), min_score, max_score
         final_score = score
         num_both_tags = num_tags - num_unique_tags
 
@@ -122,6 +121,7 @@ class Evaluator:
         now = datetime.now(timezone.utc)
 
         full_conversation_neighborhood = await self.calculate_semantic_neighborhood(full_convo_metadata)
+        print(f'full_conversation_neighborhood>>>>>>>>>{full_conversation_neighborhood}')
         if verbose:
             bt.logging.info("full_conversation_neighborhood vector count: ", len(full_conversation_neighborhood))
 
@@ -176,16 +176,19 @@ class Evaluator:
 
                 # Loop through tags that match the full convo and get the scores for those
                 results = await self.calc_scores(full_convo_metadata, full_conversation_neighborhood, miner_result)
-
+                print(f'await self.calc_scores>>>>>>>>>>>>>>>>>>>{results}')
                 (scores, scores_both, scores_unique, diff) = results
                 mean_score = np.mean(scores)
                 median_score = np.median(scores)
                 min_score = np.min(scores)
                 max_score = np.max(scores)
+                print(f'max_score>>>>>>>>>>>>>{max_score}')
                 std = np.std(scores)
                 sorted_unique_scores = np.sort(scores_unique)
                 sorted_scores = np.sort(scores)
                 top_3_sorted_unique_scores = sorted_unique_scores[-3:]
+
+                print(f'top_3_sorted_unique_scores>>>>>>>>>>>>>>>>>>>{top_3_sorted_unique_scores}')
                 if len(top_3_sorted_unique_scores) == 1:
                     num1 = np.float64(0.0)
                     num2 = np.float64(0.0)
@@ -204,10 +207,13 @@ class Evaluator:
                     (scoring_factors['mean_score'] * mean_score) +
                     (scoring_factors['max_score'] * max_score)
                 )
+                print(f'adjusted_score>>>>>>>>>>>>>>>>>>{adjusted_score}')
 
                 final_miner_score = adjusted_score #await calculate_penalty(adjusted_score,both ,unique, min_score, max_score)
                 both_tags = diff['both']
+                print(f'both_tags>>>>>>>>>>{both_tags}')
                 unique_tags = diff['unique_2']
+                print(f'unique_tags>>>>>>>>>>{unique_tags}')
                 total_tag_count = len(both_tags) + len(unique_tags)
                 uid = Utils.get(miner_result, 'uid')
                 final_miner_score = await self.calculate_penalty(uid, adjusted_score, total_tag_count, len(unique_tags), min_score, max_score)
@@ -244,6 +250,7 @@ class Evaluator:
             Utils.append_log(log_path, f"Evaluator calculating scores for tag_set: {tag_set}")
             Utils.append_log(log_path, f"Evaluator diff between ground truth and window -- both: {diff['both']} unique window: {diff['unique_2']}")
 
+        print(f'tag_set>>>>>>>>>>>>>>{tag_set}')
         for tag in tag_set:
             is_unique = False
             if tag in diff['unique_2']:
