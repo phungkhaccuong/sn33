@@ -98,11 +98,8 @@ async def test_full():
 
         print(f"Found {len(conversation_windows)} conversation windows. Sequentially sending to batches of miners")
 
-        print(f'conversation_windows.........................:{conversation_windows}')
-
         # Loop through conversation windows. Send each window to multiple miners
         for window_idx, conversation_window in enumerate(conversation_windows):
-            print(f'first conversation_window..................:{conversation_window}')
             selected_miner_uids = vl.selectStage1Miners(miner_uids)
             miner_results = await vl.send_to_miners(conversation_guid, window_idx, conversation_window, selected_miner_uids)
             #print(f'miner_results:{miner_results}')
@@ -118,6 +115,7 @@ async def test_full():
                 mock_miner_responses.append(response)
             # Evaluate results of miners
             (final_scores, rank_scores) = await el.evaluate(full_conversation_metadata, mock_miner_responses)
+            print(f'(final_scores, rank_scores)>>>>>>>>>>>>.{(final_scores, rank_scores)}')
             for idx, score in enumerate(final_scores):
                 bt.logging.debug(f"Score for miner idx: {idx} score: {score}")
                 uid = str(Utils.get(score, "uuid"))

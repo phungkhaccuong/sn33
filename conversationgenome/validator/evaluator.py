@@ -48,6 +48,7 @@ class Evaluator:
         # Note: conversation_metadata['vectors'] is a dict, so:
         #       numeric_vectors = conversation_metadata['vectors'][tag_name]['vectors']
         for tag_name, val in conversation_metadata['vectors'].items():
+            print(f'val vector>>>>>>>>>>>>>>>{val["vectors"]}')
             all_vectors.append(val['vectors'])
             #all_vectors.append(val)
             count += 1
@@ -58,6 +59,7 @@ class Evaluator:
         # Create a vector representing the entire content by averaging the vectors of all tokens
         if len(all_vectors) > 0:
             neighborhood_vectors = np.mean(all_vectors, axis=0)
+            print(f'neighborhood_vectors....................{neighborhood_vectors}')
             return neighborhood_vectors
         else:
             return None
@@ -153,6 +155,7 @@ class Evaluator:
                 hotkey = response.axon.hotkey
             except:
                 pass
+            print(f'miner_response>>>>>>>>>>>>>>>>>>>>>>>>>>>>{miner_response}')
             if not miner_response:
                 if verbose:
                     bt.logging.error(f"BAD RESPONSE EVAL: miner index: {idx} HOTKEY: {response.axon.hotkey}")
@@ -235,6 +238,7 @@ class Evaluator:
         # Remove duplicate tags
         tag_set = list(set(tags))
         diff = Utils.compare_arrays(full_convo_tags, tag_set)
+        print(f'diff>>>>>>>>>>>>>>>>{diff}')
         log_path = c.get('env', 'SCORING_DEBUG_LOG')
         if not Utils.empty(log_path):
             Utils.append_log(log_path, f"Evaluator calculating scores for tag_set: {tag_set}")
@@ -255,6 +259,7 @@ class Evaluator:
                 continue
             tag_vectors = tag_vector_dict[tag]['vectors']
             score = self.score_vector_similarity(full_conversation_neighborhood, tag_vectors, tag)
+            print(f'score>>>>>>>>>>>>>>>>>>>>.{score}')
             scores.append(score)
             if is_unique:
                 scores_unique.append(score)
