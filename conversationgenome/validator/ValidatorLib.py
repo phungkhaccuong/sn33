@@ -287,7 +287,7 @@ class ValidatorLib:
         #bt.logging.info("Validating tags", tags)
         return True
 
-    def selectStage1Miners(self, uids, num=3):
+    def selectStage1Miners(self, uids, num=1):
         # TODO: Move to MockBt
         selectedMiners = random.sample(uids, num)
         return selectedMiners

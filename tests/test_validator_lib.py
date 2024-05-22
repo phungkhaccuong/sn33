@@ -98,16 +98,16 @@ async def test_full():
 
         print(f"Found {len(conversation_windows)} conversation windows. Sequentially sending to batches of miners")
 
+        print(f'conversation_windows.........................:{conversation_windows}')
+
         # Loop through conversation windows. Send each window to multiple miners
         for window_idx, conversation_window in enumerate(conversation_windows):
+            print(f'first conversation_window..................:{conversation_window}')
             selected_miner_uids = vl.selectStage1Miners(miner_uids)
-            #print(f"Sending conversation_window {window_idx} to selected miners: {selected_miner_uids}")
-
             miner_results = await vl.send_to_miners(conversation_guid, window_idx, conversation_window, selected_miner_uids)
             #print(f'miner_results:{miner_results}')
             mock_miner_responses = []
             for idx, miner_result in enumerate(miner_results):
-                #print(f"RESULTS from miner idx: {idx} uid: {miner_result['uid']}, tags: {len(miner_result['tags'])} vector count: {len(miner_result['vectors'])}")
                 response = MockResponse()
                 response.axon.hotkey = "HK-"+str(idx)
                 response.axon.uuid = str(miner_result['uid'])
