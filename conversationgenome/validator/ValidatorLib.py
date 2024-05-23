@@ -206,7 +206,7 @@ class ValidatorLib:
             if minValidTags:
                 # Break the full conversation up into overlapping conversation windows
                 convoWindows = self.getConvoWindows(full_conversation)
-                ###################print(f'convoWindows.....................{convoWindows}')
+                print(f'convoWindows.....................{convoWindows}')
                 if len(convoWindows) > minConvWindows:
                     out = (full_conversation, full_conversation_metadata, convoWindows)
                 else:

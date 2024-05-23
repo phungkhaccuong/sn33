@@ -53,7 +53,7 @@ async def test_full():
     vl = ValidatorLib()
     el = Evaluator()
     result = await vl.reserve_conversation(batch_num=batch_num)
-    #########################print(f'vl.reserve_conversation...............................{result}')
+    print(f'vl.reserve_conversation...............................{result}')
     test_mode = True
     if result:
         (full_conversation, full_conversation_metadata, conversation_windows) = result

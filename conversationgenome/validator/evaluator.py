@@ -179,12 +179,17 @@ class Evaluator:
                 print(f'await self.calc_scores>>>>>>>>>>>>>>>>>>>{results}')
                 (scores, scores_both, scores_unique, diff) = results
                 mean_score = np.mean(scores)
+                print(f'mean_score>>>>>>>>>>>>>{mean_score}')
                 median_score = np.median(scores)
+                print(f'median_score>>>>>>>>>>>>>{median_score}')
                 min_score = np.min(scores)
+                print(f'min_score>>>>>>>>>>>>>{min_score}')
                 max_score = np.max(scores)
                 print(f'max_score>>>>>>>>>>>>>{max_score}')
                 std = np.std(scores)
                 sorted_unique_scores = np.sort(scores_unique)
+                print(f'scores_unique>>>>>>>>>>>{scores_unique}')
+                print(f'sorted_unique_scores>>>>>>>>>>>{sorted_unique_scores}')
                 sorted_scores = np.sort(scores)
                 top_3_sorted_unique_scores = sorted_unique_scores[-3:]
 
@@ -207,6 +212,7 @@ class Evaluator:
                     (scoring_factors['mean_score'] * mean_score) +
                     (scoring_factors['max_score'] * max_score)
                 )
+
                 print(f'adjusted_score>>>>>>>>>>>>>>>>>>{adjusted_score}')
 
                 final_miner_score = adjusted_score #await calculate_penalty(adjusted_score,both ,unique, min_score, max_score)

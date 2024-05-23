@@ -30,7 +30,6 @@ class MinerLib:
     verbose = False
 
     async def do_mining(self, conversation_guid, window_idx, conversation_window, minerUid, dryrun=False):
-        #bt.logging.debug("MINERCONVO", convoWindow, minerUid)
         out = {"uid":minerUid, "tags":[], "profiles":[], "convoChecksum":11}
 
         if not dryrun:

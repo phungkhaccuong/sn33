@@ -118,7 +118,7 @@ class llm_openai:
 
     async def conversation_to_metadata(self,  convo):
         (xml, participants) = self.generate_convo_xml(convo)
-        ######################################print(f'(xml, participants)....................................{(xml, participants)}')
+        print(f'(xml, participants)....................................{(xml, participants)}')
         tags = None
         out = {"tags":{}}
 
@@ -154,7 +154,7 @@ class llm_openai:
                     tag_logs.append(f"{tag}={len(vectors)}vs")
                 out['vectors'][tag] = {"vectors":vectors}
             if self.verbose:
-                print("        Embeddings received: " + ", ".join(tag_logs))
+                print("Embeddings received: " + ", ".join(tag_logs))
                 print("VECTORS", tag, vectors)
             out['success'] = 1
         else:
@@ -318,6 +318,7 @@ class llm_openai:
               "messages": [{"role": "user", "content": prompt}],
             }
             completion = self.do_direct_call(data)
+            print(f'self.do_direct_call.......{completion}')
             errors = Utils.get(completion, "errors", [])
             if Utils.get(completion, "success"):
                 out = completion
@@ -380,7 +381,7 @@ class llm_openai:
             out = await self.openai_prompt_call_json(convoXmlStr=convoXmlStr, participants=participants)
         else:
             out = await self.openai_prompt_call_csv(convoXmlStr=convoXmlStr, participants=participants)
-        #####################print(f'out.........................................{out}')
+        print(f'self.openai_prompt_call_csv.........................................{out}')
         return out
 
     async def test_tagging(self):

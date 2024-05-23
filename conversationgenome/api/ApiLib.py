@@ -57,7 +57,7 @@ class ApiLib:
             maxLines = Utils._int(c.get('env', 'MAX_CONVO_LINES', 300))
             if response and response.status_code == 200:
                 selectedConvo = response.json()
-                ##########################print(f'selectedConvo...............:{selectedConvo}')
+                print(f'selectedConvo...............:{selectedConvo}')
             else:
                 bt.logging.error(f"reserveConversation error. Response: {response}")
                 return None
@@ -68,7 +68,7 @@ class ApiLib:
                 "participants": Utils.get(selectedConvo, "participants", ["p1","p2"]),
                 "lines":Utils.get(selectedConvo, "lines", [])[0:maxLines],
             }
-            # ####################print(f'convo............................{convo}')
+            print(f'convo............................{convo}')
         return convo
 
     async def completeConversation(self, hotkey, guid, dryrun=False):
